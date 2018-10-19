@@ -1,0 +1,20 @@
+<h1>Welcome to the Task Tracker</h1>
+<%= if @current_user do %>
+  <h3>Signed in as: <%= @current_user.name %> |
+    <%= link("Logout", to: Routes.session_path(@conn, :delete),
+      method: :delete) %>
+    <br/><br/>
+    <small-text class="text-muted">Click on the tasks link in the Nav bar to see all tasks </small-text>
+  </h3>
+<% else %>
+  <h2>Enter your username to login</h2>
+  <div class="flex-container"> 
+    <%= form_for @conn, Routes.session_path(@conn, :create),
+      [class: "form-inline"], fn f -> %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= submit "Login", class: "btn btn-secondary" %>
+    <h3 class="or">or</h3>
+    <h2><%= link "Register a new account", to: Routes.user_path(@conn, :new) %></h2>
+    <% end %>
+  </div>
+<% end %>

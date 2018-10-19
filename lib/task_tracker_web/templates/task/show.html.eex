@@ -1,0 +1,31 @@
+<h1>Show Task</h1>
+
+<div class="card text-center task-card">
+  <div class="card-body margins-20">
+    <h2 class="card-title"><%= @task.title %></h5>
+    <h5 class="card-text text-muted"><%= @task.description %></p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Created <%= @task.start_time %> minutes ago</li>
+    <li class="list-group-item">Assigned to <%= @task.user %></li>
+    <li class="list-group-item">
+      <%= if @task.completed do %>
+        Completed
+      <% else %>
+        In progress
+      <% end %>
+    </li>
+  </ul>
+  <div class="card-body">
+    <div class="button-spacing">
+    <%= link "Edit Task", to: Routes.task_path(@conn, :edit, @task), 
+          class: "btn btn-primary" %>
+    <%= link "Delete", to: Routes.task_path(@conn, :delete, @task), 
+      method: :delete, data: [confirm: "Are you sure?"],
+      class: "btn btn-danger" %>
+    </div>
+  </div>
+</div>
+
+<div class="back-button"><%= link "Back to tasks", to: Routes.task_path(@conn, :index),
+  class: "btn-primary btn-lg" %></div>

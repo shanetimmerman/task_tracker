@@ -16,7 +16,7 @@
       <td>
         <%= link "Show tasks for this user", to: Routes.user_path(@conn, :show, user),
           class: "btn btn-primary" %>
-        <%= link "Rename user", to: Routes.task_path(@conn, :edit, user), 
+        <%= link "Rename user", to: Routes.user_path(@conn, :edit, user), 
           class: "btn btn-secondary" %>
         <%= link "Remove User", to: Routes.user_path(@conn, :delete, user), 
           method: :delete, data: [confirm: "Are you sure?"],

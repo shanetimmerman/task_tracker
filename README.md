@@ -19,7 +19,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Mailing list: http://groups.google.com/group/phoenix-talk
   * Source: https://github.com/phoenixframework/phoenix
 
-#Design Choices
+# Design Choices
 
 This application was build under the assumption that users would be working
 in a team environment. This is built off the stipulation that one user can

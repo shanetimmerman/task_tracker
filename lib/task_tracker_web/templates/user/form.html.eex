@@ -13,6 +13,7 @@
       <%= text_input f, :name, class: "form-control" %>
       <%= error_tag f, :name %>
     </div>
+    <h3 class="text-muted">User created with the manager: Janice</h3>
   </div>
     
   <div>

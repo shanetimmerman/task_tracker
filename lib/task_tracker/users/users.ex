@@ -22,9 +22,23 @@ defmodule TaskTracker.Users do
     Repo.all(User)
   end
 
+  def list_users_preload_manager do
+    Repo.all(User)
+    |> Repo.preload(:manager)
+  end
+
   def get_names do
-    users = Repo.all(User)
+    users = list_users()
+    users
     |> Enum.map(fn (user) -> user.name end)
+  end
+
+  def get_managed_names(id) do
+    IO.puts(id)
+    users = list_users()
+    users
+    |> Enum.filter(&(&1.id == id or &1.manager_id == id))
+    |> Enum.map(&(&1.name))
   end
 
   @doc """
@@ -43,7 +57,16 @@ defmodule TaskTracker.Users do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  def get_user(id), do: Repo.get(User, id)
+  def get_user(id) do
+    Repo.get(User, id)
+    |> Repo.preload(:manager)
+    |> Repo.preload(:underlings)
+  end
+
+  def get_user_preload_all(id) do
+    Repo.get(User, id)
+    |> Repo.preload([:underlings, :manager, :tasks])
+  end
   
   def get_user_by_name(name) do
     Repo.get_by(User, name: name)
@@ -87,6 +110,19 @@ defmodule TaskTracker.Users do
 
   def get_tasks_for_user(id) do
     Tasks.get_tasks_for_user(id)
+  end
+
+  def get_underling_tasks(id) do
+    user = get_user_preload_all(id)
+    Map.put(user, :underlings, Enum.map(user.underlings, &query_user_tasks/1))
+  end
+
+  def query_user_tasks(user) do
+    user = user
+    |> Repo.preload(:tasks)
+    user = Map.put(user, :tasks, Enum.map(user.tasks, &(&1 |> Repo.preload(:time_blocks))))
+    IO.inspect user
+    user
   end
 
   @doc """

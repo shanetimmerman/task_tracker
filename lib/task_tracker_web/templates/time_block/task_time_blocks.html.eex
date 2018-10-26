@@ -1,0 +1,7 @@
+<%= for timeblock <- @time_blocks do %>
+
+  <%= render "show.html", Map.put(assigns, :time_block, timeblock) %>
+
+<% end %>
+<%= link "Add Timeblock", to: Routes.time_block_path(@conn, :new),
+  class: "btn-success btn-sm" %>

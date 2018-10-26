@@ -25,23 +25,22 @@ defmodule TaskTracker.Tasks do
 
   def display_list(tasks) do
     tasks
-    |> Enum.map(&to_15_min/1)
     |> Enum.map(&to_user_name/1)
   end
 
-  def to_15_min(task) do
+  # def to_15_min(task) do
 
-    st = Map.get(task, :start_time)
-    now = DateTime.utc_now()
+  #   st = Map.get(task, :start_time)
+  #   now = DateTime.utc_now()
 
-    diff = DateTime.diff(now, st)
+  #   diff = DateTime.diff(now, st)
     
-    min_taken = diff / 60
+  #   min_taken = diff / 60
 
-    in_15 = trunc(trunc(min_taken + 15/2) / 15) * 15;
+  #   in_15 = trunc(trunc(min_taken + 15/2) / 15) * 15;
 
-    Map.put(task, :start_time, in_15)
-  end
+  #   Map.put(task, :start_time, in_15)
+  # end
 
   def to_user_name(task) do
     u = Map.get(task, :user)
@@ -51,9 +50,8 @@ defmodule TaskTracker.Tasks do
   end
 
   def get_tasks_for_user(id) do
-    tasks = Repo.all(Task)
-    |> Enum.filter(&match_id?(&1, id))
-    |> display_list()
+    Repo.all(from t in TaskTracker.Tasks, where: t.id == ^id, select: t, preload: [:timeblocks, :user])
+    # |> Repo.preload([:timeblocks, :user])
   end
 
   def match_id?(task, id) do
@@ -79,9 +77,8 @@ defmodule TaskTracker.Tasks do
   def get_task!(id), do: Repo.get!(Task, id)
 
   def get_task(id) do
-    get_task!(id)
-    |> to_15_min()
-    |> to_user_name()
+    Repo.get(Task, id)
+    |> Repo.preload([:user, :time_blocks])   
   end
 
   @doc """
@@ -97,7 +94,6 @@ defmodule TaskTracker.Tasks do
 
   """
   def create_task(attrs \\ %{}) do
-    attrs = Map.put(attrs, "start_time", DateTime.utc_now())
     attrs = name_to_userid(attrs)
     
     %Task{}
@@ -106,9 +102,9 @@ defmodule TaskTracker.Tasks do
   end
 
   def name_to_userid(task) do
-    name = Map.get(task, "user")
+    name = Map.get(task, "user_id")
     user = Users.get_user_by_name(name)
-    Map.put(task, "user", user.id)
+    Map.put(task, "user_id", user.id)
   end
 
   @doc """

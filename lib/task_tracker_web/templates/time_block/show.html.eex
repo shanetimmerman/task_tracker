@@ -1,0 +1,22 @@
+
+<ul>
+  <li>
+    <strong>Start:</strong>
+    <%= @time_block.start %>
+  </li>
+
+  <li>
+    <strong>End:</strong>
+    <%= @time_block.end %>
+  </li>
+
+  <li>
+    <strong>Total:</strong>
+    <%= DateTime.diff(@time_block.end, @time_block.start) %>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.time_block_path(@conn, :edit, @time_block), 
+      class: "btn-sm btn-primary"%></span>
+<span><%= link "Delete", to: Routes.time_block_path(@conn, :delete, @time_block), 
+      class: "btn-sm btn-danger"%></span>

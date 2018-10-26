@@ -96,6 +96,7 @@ config :task_tracker, TaskTrackerWeb.Endpoint,
 # Configure your database
 config :task_tracker, TaskTracker.Repo,
   username: "task_tracker",
-  password: get_secret.("db_pass"),,
+  password: "celuejeiju1R",
+  # password: get_secret.("db_pass"),
   database: "task_tracker_prod",
   pool_size: 15

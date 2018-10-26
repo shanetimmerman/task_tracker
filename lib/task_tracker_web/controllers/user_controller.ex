@@ -10,7 +10,7 @@ defmodule TaskTrackerWeb.UserController do
       |> put_flash(:error, "You must log in first")
       |> redirect(to: Routes.page_path(conn, :index))
     else
-      users = Users.list_users()
+      users = Users.list_users_preload_manager()
       render(conn, "index.html", users: users)
     end
   end
@@ -21,6 +21,7 @@ defmodule TaskTrackerWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    user_params = Map.put(user_params, "manager", nil)
     case Users.create_user(user_params) do
       {:ok, user} ->
         conn
@@ -34,9 +35,8 @@ defmodule TaskTrackerWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
-    tasks = Users.get_tasks_for_user(id)
-    render(conn, "show.html", user: user, tasks: tasks)
+    user = Users.get_underling_tasks(id)
+    render(conn, "show.html", user: user)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -60,8 +60,6 @@ defmodule TaskTrackerWeb.UserController do
   end
 
   def delete(conn, %{"id" => id}) do
-    IO.inspect get_session(conn, :user_id)
-    IO.inspect id
     {id_num, _} = Integer.parse(id)
     if (get_session(conn, :user_id) == id_num) do
       conn

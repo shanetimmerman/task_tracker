@@ -19,10 +19,10 @@
     </div>
     
     <div class="form-group">
-      <%= label f, :user %>
-      <%= select f, :user, @users, class: "form-control",
+      <%= label f, :user_id %>
+      <%= select f, :user_id, @users, class: "form-control",
         style: "font-size: 20px" %>
-      <%= error_tag f, :user %>
+      <%= error_tag f, :user_id %>
     </div>
     
     <div class="form-group check-group">
@@ -30,6 +30,9 @@
       <%= checkbox f, :completed, class: "large-checkbox" %>
       <%= error_tag f, :completed %>
     </div>
+
+
+    <%= render TaskTrackerWeb.TimeBlockView, "task_time_blocks.html", Map.put(assigns, :time_blocks, @task.time_blocks) %>
 
     <div>
       <%= submit "Save", class: "btn-primary btn-lg", style: "font-size: 24px;"%>

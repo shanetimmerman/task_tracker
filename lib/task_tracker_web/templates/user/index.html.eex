@@ -9,18 +9,43 @@
     </tr>
   </thead>
   <tbody>
-<%= for user <- @users do %>
+  
+  <%= for user <- @users do %>
     <tr>
       <td><%= user.name %></td>
 
       <td>
-        <%= link "Show tasks for this user", to: Routes.user_path(@conn, :show, user),
+        <%= link "Show tasks for this user and their underlings", 
+          to: Routes.user_path(@conn, :show, user),
           class: "btn btn-primary" %>
-        <%= link "Rename user", to: Routes.user_path(@conn, :edit, user), 
-          class: "btn btn-secondary" %>
-        <%= link "Remove User", to: Routes.user_path(@conn, :delete, user), 
-          method: :delete, data: [confirm: "Are you sure?"],
-          class: "btn btn-danger" %>
+        <%= if user.manager_id == @current_user.id do %>
+          <%= link "Modify user",
+            to: Routes.user_path(@conn, :edit, user), 
+            class: "btn btn-secondary" %>
+          <%= link "Remove User",
+            to: Routes.user_path(@conn, :delete, user), 
+            method: :delete, data: [confirm: "Are you sure?"],
+            class: "btn btn-danger" %>
+          <h5>Managed by you</h5>
+        <% else %>
+          <%= if user.id == @current_user.id do %>
+            <%# Can modify but not remove self  %>
+            <%= link "Modify user",
+              to: Routes.user_path(@conn, :edit, user), 
+              class: "btn btn-secondary" %>
+          <% end %>
+          
+          <%= if user.manager_id do %>
+            <h5>Managed by: <%= user.manager.name %></h5>
+          <% else %>
+            <h5>No manager</h5>
+          <% end %>
+        <% end %>
+
+        <%= if user.id == @current_user.id do %>
+          <h6>(Current User)</h6>
+        <% end %>
+
       </td>
     </tr>
 <% end %>

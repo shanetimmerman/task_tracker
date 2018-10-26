@@ -1,0 +1,22 @@
+<%= if @user.id == @current_user.id  do %>
+  <h1>Your tasks </h1>
+<% else %>
+  <h1>Tasks for user:  <%= @user.name %></h1>
+<% end %>
+
+<%= if length(@user.tasks) > 0 do %>
+  <div class="container-fluid" id="card-container">
+    <div class="card-columns">
+      <%= for task <- @user.tasks do %>
+        <%= render TaskTrackerWeb.TaskView, "show.html", Map.put(assigns, :task, task) %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <h2 class="text-muted">No tasks have been assigned to this user</h2>
+<% end %>
+
+<script>
+  window.task_path = "/tasks";
+  window.time_block_path = "<%= Routes.time_block_path(@conn, :create) %>";
+</script>

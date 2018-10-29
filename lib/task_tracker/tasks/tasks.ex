@@ -9,6 +9,8 @@ defmodule TaskTracker.Tasks do
   alias TaskTracker.Users.User
   alias TaskTracker.Users
 
+  require DateTime
+
   @doc """
   Returns the list of tasks.
 
@@ -105,6 +107,13 @@ defmodule TaskTracker.Tasks do
     name = Map.get(task, "user_id")
     user = Users.get_user_by_name(name)
     Map.put(task, "user_id", user.id)
+  end
+
+  def add_start_time(id) do
+    IO.puts "updating start time"
+    Repo.get_task!(id)
+    |> Task.changeset(%{"start_time" => DateTime.utc_now()})
+    |> Repo.update()
   end
 
   @doc """

@@ -3,6 +3,7 @@ defmodule TaskTrackerWeb.TimeBlockController do
   
   alias TaskTracker.TimeBlocks
   alias TaskTracker.TimeBlocks.TimeBlock
+  alias TaskTracker.Tasks
   
   require DateTime
 
@@ -26,6 +27,10 @@ defmodule TaskTrackerWeb.TimeBlockController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  def create(conn, %{"task_id" => id}) do
+    Tasks.add_start_time(id)
   end
 
   def show(conn, %{"id" => id}) do

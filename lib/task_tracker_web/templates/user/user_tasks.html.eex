@@ -17,6 +17,5 @@
 <% end %>
 
 <script>
-  window.task_path = "/tasks";
-  window.time_block_path = "<%= Routes.time_block_path(@conn, :create) %>";
+  window.ajax_path = "/ajax/time_blocks";
 </script>

@@ -28,12 +28,13 @@ defmodule TaskTrackerWeb.Router do
     resources "/sessions", SessionController, only: [:create, :delete], singleton: true
     resources "/tasks", TaskController
     resources "/users", UserController
-    resources "/time_blocks", TimeBlockController
+    # resources "/time_blocks", TimeBlockController
   end
 
   scope "/ajax", TaskTrackerWeb do
     pipe_through :ajax
-    resources "/tb", TimeBlockController, except: [:new, :edit]
+
+    resources "/time_blocks", TimeBlockController, only: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.

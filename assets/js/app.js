@@ -10,16 +10,16 @@ import "phoenix_html"
 $(function () {
 
     $('#start-button').click((ev) => {
-        let task_id = $(ev.target).data('task-id');
+        let t_id = $(ev.target).data('task-id');
 
         let text = JSON.stringify({
             task: {
-              start_time: new Date().getTime(),
+              task_id: t_id,
             },
           });
 
-        $.ajax(window.task_path + "/" + task_id, {
-            method: "put",
+        $.ajax(window.ajax_path, {
+            method: "post",
             dataType: "json",
             contentType: "application/json; charset=UTF-8",
             data: text,
@@ -34,7 +34,7 @@ $(function () {
     $('#stop-button').click((ev) => {
         let task_id = $(ev.target).data('task-id');
 
-        $.ajax(window.task_path + "/" + task_id, {
+        $.ajax(window.ajax_path, {
             method: "get",
             dataType: "json",
             contentType: "application/json; charset=UTF-8",
@@ -52,7 +52,7 @@ $(function () {
                   end: new Date().getTime(),
                   task_id: task_id,
             }});
-            $.ajax(window.time_block_path, {
+            $.ajax(window.ajax_path, {
                 method: "post",
                 dataType: "json",
                 contentType: "application/json; charset=UTF-8",
@@ -66,7 +66,7 @@ $(function () {
         }
 
         function reset_start_time(task_id) {
-            $.ajax(window.task_path + "/" + task_id, {
+            $.ajax(window.ajax_path, {
                 method: "put",
                 dataType: "json",
                 contentType: "application/json; charset=UTF-8",

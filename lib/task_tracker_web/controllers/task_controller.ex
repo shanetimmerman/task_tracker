@@ -49,7 +49,6 @@ defmodule TaskTrackerWeb.TaskController do
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
-    IO.inspect task_params
     task = Tasks.get_task!(id)
 
     case Tasks.update_task(task, task_params) do

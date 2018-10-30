@@ -70,7 +70,7 @@ defmodule TaskTracker.Users do
 
   def manager_name_to_id(user_params) do
     case Map.get(user_params, "manager_id") do
-      "None" -> Map.put(user_params, "manager_id", nil)
+      "None" -> Map.delete(user_params, "manager_id")
       name -> Map.put(user_params, "manager_id", get_user_by_name(name).id)
     end
   end
@@ -81,7 +81,7 @@ defmodule TaskTracker.Users do
   end
   
   def get_user_by_name(name) do
-    Repo.get_by!(User, name: name)
+    Repo.get_by(User, name: name)
   end
 
   @doc """

@@ -28,12 +28,9 @@
             class: "btn btn-danger" %>
           <h5>Managed by you</h5>
         <% else %>
-          <%= if user.id == @current_user.id do %>
-            <%# Can modify but not remove self  %>
-            <%= link "Modify user",
-              to: Routes.user_path(@conn, :edit, user), 
-              class: "btn btn-secondary" %>
-          <% end %>
+          <%= link "Modify user",
+            to: Routes.user_path(@conn, :edit, user), 
+            class: "btn btn-secondary" %>
           
           <%= if user.manager_id do %>
             <h5>Managed by: <%= user.manager.name %></h5>

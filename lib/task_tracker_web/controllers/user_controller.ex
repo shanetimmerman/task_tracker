@@ -17,11 +17,13 @@ defmodule TaskTrackerWeb.UserController do
 
   def new(conn, _params) do
     changeset = Users.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+    users = Users.get_names()
+    users = List.insert_at(users, 0, "None")
+    render(conn, "new.html", changeset: changeset, users: users)
   end
 
   def create(conn, %{"user" => user_params}) do
-    user_params = Map.put(user_params, "manager", nil)
+    user_params = Users.manager_name_to_id(user_params)
     case Users.create_user(user_params) do
       {:ok, user} ->
         conn
@@ -40,14 +42,17 @@ defmodule TaskTrackerWeb.UserController do
   end
 
   def edit(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
+    user = Users.get_user(id)
+    users = Users.get_names_not_id(id)
+    users = List.insert_at(users, 0, "None")
     changeset = Users.change_user(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
+    render(conn, "edit.html", user: user, users: users, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Users.get_user!(id)
 
+    user_params = Users.manager_name_to_id(user)
     case Users.update_user(user, user_params) do
       {:ok, user} ->
         conn

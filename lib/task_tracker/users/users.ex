@@ -63,13 +63,25 @@ defmodule TaskTracker.Users do
     |> Repo.preload(:underlings)
   end
 
+  def get_names_not_id(id) do
+    Repo.all from u in User, select: u.name, where: u.id != ^id
+  end
+
+
+  def manager_name_to_id(user_params) do
+    case Map.get(user_params, "manager_id") do
+      "None" -> Map.put(user_params, "manager_id", nil)
+      name -> Map.put(user_params, "manager_id", get_user_by_name(name).id)
+    end
+  end
+
   def get_user_preload_all(id) do
     Repo.get(User, id)
     |> Repo.preload([:underlings, :manager, :tasks])
   end
   
   def get_user_by_name(name) do
-    Repo.get_by(User, name: name)
+    Repo.get_by!(User, name: name)
   end
 
   @doc """
